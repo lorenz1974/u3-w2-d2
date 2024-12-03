@@ -1,4 +1,5 @@
 import { Component, useState, setState } from 'react'
+import { Button } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import CommentRate from './CommentRate'
 
@@ -10,6 +11,33 @@ const MyComments = (props) => {
     rate: '1',
     elementId: props.modalContent.asin,
   })
+
+  const deleteComment = (id) => {
+    fetch('https://striveschool-api.herokuapp.com/api/comments/' + id, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization:
+          'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzM3MDYyMDhhZDEyOTAwMTU4NzZiYzEiLCJpYXQiOjE3MzMxNDUxNDMsImV4cCI6MTczNDM1NDc0M30.b9vuC2wosIXVBrGf0AQwNBGmQXwsfYjq4W2ppICdxQA',
+      },
+    })
+      .then((response) => {
+        if (response.ok) {
+          //alert('Commento aggiunto con successo!')
+          setNewComments({
+            comment: '',
+            rate: '1',
+          })
+          props.setAppState('update', true)
+        } else {
+          throw new Error('Errore nella cancellazione del commento')
+        }
+      })
+      .catch((err) => {
+        console.error(err)
+        alert('Errore nella cancellazione del commento')
+      })
+  }
 
   // Funzione per inviare il commento
   const postComment = () => {
@@ -148,6 +176,19 @@ const MyComments = (props) => {
                   <span className='fw-bold'>Rating:</span>
                   <CommentRate rating={comment.rate}></CommentRate>
                 </p>
+                {comment.author === props.commentAppUser && (
+                  <Button
+                    variant='danger'
+                    onClick={() => {
+                      deleteComment(comment._id)
+                    }}
+                  >
+                    <FontAwesomeIcon
+                      icon='fa-solid fa-trash'
+                      className='fs-8'
+                    />
+                  </Button>
+                )}
               </li>
             ))}
           </ul>

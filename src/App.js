@@ -61,7 +61,7 @@ class App extends Component {
     searchTerms: '',
     selectedBooks: [],
     comments: [],
-    commentUser: 'l.lione@remoteitalia.com',
+    commentAppUser: 'l.lione@remoteitalia.com',
     isLoading: false,
     isError: false,
     update: false,
@@ -192,7 +192,9 @@ class App extends Component {
                     (bookComments) =>
                       String(this.state.modalContent.asin) === String(bookComments.elementId)
                   )}
-                  modalContent={this.state.modalContent} setAppState={this.setAppState} />}
+                  modalContent={this.state.modalContent}
+                  setAppState={this.setAppState}
+                  commentAppUser={this.state.commentAppUser} />}
             </Col>
           </Row>
 
